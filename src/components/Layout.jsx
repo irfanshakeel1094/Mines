@@ -1,10 +1,18 @@
-import { Outlet, NavLink } from 'react-router';
-import { LayoutDashboard, Camera, Scale, Package, BarChart3, Mountain, Radio, Users, UserCog, FileText, Network, Globe } from 'lucide-react';
+import { Outlet, NavLink, useNavigate } from 'react-router';
+import { LayoutDashboard, Camera, Scale, Package, BarChart3, Mountain, Radio, Users, UserCog, FileText, Network, Globe, LogOut } from 'lucide-react';
 import { useState } from 'react';
 
 export function Layout() {
-  const [currentRole, setCurrentRole] = useState('admin');
+  const navigate = useNavigate();
+  const [currentRole, setCurrentRole] = useState(() => localStorage.getItem('userRole') || 'admin');
   const [language, setLanguage] = useState('en');
+
+  const handleLogout = () => {
+    localStorage.removeItem('userRole');
+    localStorage.removeItem('isAuthenticated');
+    localStorage.removeItem('username');
+    navigate('/');
+  };
 
   const translations = {
     en: {
@@ -59,16 +67,16 @@ export function Layout() {
     accounts: 'bg-orange-100 text-orange-700'};
 
   const navItems = [
-    { path: '/', label: t.dashboard, icon: LayoutDashboard, roles: ['admin', 'operator', 'security', 'accounts'] },
-    { path: '/vehicle-entry', label: t.vehicleEntry, icon: Radio, roles: ['admin', 'operator', 'security'] },
-    { path: '/detection', label: t.aiDetection, icon: Camera, roles: ['admin', 'operator'] },
-    { path: '/weighbridge', label: t.weighbridge, icon: Scale, roles: ['admin', 'operator'] },
-    { path: '/inventory', label: t.inventory, icon: Package, roles: ['admin', 'operator', 'accounts'] },
-    { path: '/customers', label: t.customers, icon: Users, roles: ['admin', 'accounts'] },
-    { path: '/employees', label: t.employees, icon: UserCog, roles: ['admin'] },
-    { path: '/billing', label: t.billing, icon: FileText, roles: ['admin', 'operator', 'accounts'] },
-    { path: '/reports', label: t.reports, icon: BarChart3, roles: ['admin', 'accounts'] },
-    { path: '/system', label: t.system, icon: Network, roles: ['admin'] },
+    { path: '/dashboard', label: t.dashboard, icon: LayoutDashboard, roles: ['admin', 'operator', 'security', 'accounts'] },
+    { path: '/dashboard/vehicle-entry', label: t.vehicleEntry, icon: Radio, roles: ['admin', 'operator', 'security'] },
+    { path: '/dashboard/detection', label: t.aiDetection, icon: Camera, roles: ['admin', 'operator'] },
+    { path: '/dashboard/weighbridge', label: t.weighbridge, icon: Scale, roles: ['admin', 'operator'] },
+    { path: '/dashboard/inventory', label: t.inventory, icon: Package, roles: ['admin', 'operator', 'accounts'] },
+    { path: '/dashboard/customers', label: t.customers, icon: Users, roles: ['admin', 'accounts'] },
+    { path: '/dashboard/employees', label: t.employees, icon: UserCog, roles: ['admin'] },
+    { path: '/dashboard/billing', label: t.billing, icon: FileText, roles: ['admin', 'operator', 'accounts'] },
+    { path: '/dashboard/reports', label: t.reports, icon: BarChart3, roles: ['admin', 'accounts'] },
+    { path: '/dashboard/system', label: t.system, icon: Network, roles: ['admin'] },
   ];
 
   const filteredNavItems = navItems.filter(item => item.roles.includes(currentRole));
@@ -95,7 +103,7 @@ export function Layout() {
                 <li key={item.path}>
                   <NavLink
                     to={item.path}
-                    end={item.path === '/'}
+                    end={item.path === '/dashboard'}
                     className={({ isActive }) =>
                       `flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
                         isActive
@@ -145,6 +153,15 @@ export function Layout() {
               <option value="accounts">Accounts</option>
             </select>
           </div>
+
+          {/* Logout Button */}
+          <button
+            onClick={handleLogout}
+            className="w-full flex items-center gap-2 px-4 py-3 bg-red-600 hover:bg-red-700 rounded-lg transition-colors text-white font-medium"
+          >
+            <LogOut className="w-4 h-4" />
+            <span>Logout</span>
+          </button>
         </div>
       </aside>
 

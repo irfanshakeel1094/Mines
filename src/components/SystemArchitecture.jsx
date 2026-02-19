@@ -1,13 +1,6 @@
-import { Network, Server, Camera, Radio, Scale, Monitor, Database, Shield } from 'lucide-react';
+import { Network, Camera, Radio, Scale, Shield, FileText } from 'lucide-react';
 
 export function SystemArchitecture() {
-  const components = [
-    { name: 'Frontend Dashboard', icon: Monitor, color: 'bg-blue-500', description: 'Web-based control panel' },
-    { name: 'Backend APIs', icon: Server, color: 'bg-green-500', description: 'RESTful API services' },
-    { name: 'Database Server', icon: Database, color: 'bg-purple-500', description: 'Centralized data storage' },
-    { name: 'AI Server', icon: Camera, color: 'bg-orange-500', description: 'CCTV processing & ML models' },
-  ];
-
   const hardware = [
     { name: 'CCTV Cameras', icon: Camera, description: 'AI-enabled material detection', status: 'Online' },
     { name: 'NFC Readers', icon: Radio, description: 'Vehicle identification', status: 'Online' },
@@ -29,60 +22,6 @@ export function SystemArchitecture() {
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900">System Architecture</h1>
         <p className="text-gray-600 mt-1">Complete system overview and infrastructure</p>
-      </div>
-
-      {/* Workflow Diagram */}
-      <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl p-8 mb-8 border border-blue-200">
-        <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">End-to-End Workflow</h2>
-        <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
-          {[
-            { num: '1', label: 'Vehicle Entry', sublabel: 'NFC Scanning', icon: Radio, color: 'from-blue-500 to-blue-600' },
-            { num: '2', label: 'Material Loading', sublabel: 'Loading Area', icon: Package, color: 'from-green-500 to-green-600' },
-            { num: '3', label: 'AI Detection', sublabel: 'CCTV Analysis', icon: Camera, color: 'from-purple-500 to-purple-600' },
-            { num: '4', label: 'Weighbridge', sublabel: 'Auto Weight', icon: Scale, color: 'from-orange-500 to-orange-600' },
-            { num: '5', label: 'Billing', sublabel: 'Invoice Gen', icon: FileText, color: 'from-pink-500 to-pink-600' },
-            { num: '6', label: 'Exit', sublabel: 'Permit Check', icon: CheckCircle, color: 'from-red-500 to-red-600' }
-          ].map((step, index) => {
-            const Icon = step.icon;
-            return (
-              <div key={index} className="relative">
-                <div className="text-center">
-                  <div className={`bg-gradient-to-br ${step.color} w-16 h-16 rounded-full flex items-center justify-center text-white font-bold text-xl mx-auto mb-3 shadow-lg`}>
-                    <Icon className="w-8 h-8" />
-                  </div>
-                  <div className={`absolute top-8 ${index < 5 ? 'left-16 w-full' : ''}`}>
-                    {index < 5 && (
-                      <div className="h-0.5 bg-gray-300 mt-8" />
-                    )}
-                  </div>
-                  <p className="text-sm font-semibold text-gray-900">{step.num}. {step.label}</p>
-                  <p className="text-xs text-gray-600">{step.sublabel}</p>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Software Components */}
-      <div className="mb-8">
-        <h2 className="text-xl font-semibold text-gray-900 mb-4">Software Components</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {components.map((component, index) => {
-            const Icon = component.icon;
-            return (
-              <div key={index} className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-lg transition-shadow">
-                <div className="flex flex-col items-center text-center">
-                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-3">
-                    <Icon className="w-6 h-6 text-blue-600" />
-                  </div>
-                  <h3 className="font-semibold text-gray-900">{component.name}</h3>
-                  <p className="text-xs text-gray-600 mt-1">{component.desc}</p>
-                </div>
-              </div>
-            );
-          })}
-        </div>
       </div>
 
       {/* Hardware Integration */}
@@ -170,6 +109,3 @@ export function SystemArchitecture() {
     </div>
   );
 }
-
-// Import required icons
-import { Package, FileText, CheckCircle } from 'lucide-react';
