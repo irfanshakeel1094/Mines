@@ -1,6 +1,8 @@
-import { UserCog, UserPlus, Shield, DollarSign, Users } from 'lucide-react';
+import { UserCog, UserPlus, Shield, DollarSign, Users, Check, ArrowUpRight } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 export function Employees() {
+  const { t } = useLanguage();
   const employees = [
     { id: 'EMP-001', name: 'Rajesh Kumar', role: 'Admin', department: 'Management', phone: '+91 9876543210', email: 'rajesh@smartmines.com', joinDate: 'Jan 2024', status: 'Active' },
     { id: 'EMP-002', name: 'Priya Sharma', role: 'Operator', department: 'Operations', phone: '+91 9876543211', email: 'priya@smartmines.com', joinDate: 'Feb 2024', status: 'Active' },
@@ -10,62 +12,80 @@ export function Employees() {
   ];
 
   const rolePermissions = {
-    Admin: ['Full system access', 'User management', 'All reports', 'System settings', 'Data export'],
-    Operator: ['Vehicle entry', 'Weighbridge', 'AI detection', 'Basic reports'],
-    Security: ['Entry/exit verification', 'NFC scanning', 'Alert monitoring'],
-    Accounts: ['Billing', 'Invoice generation', 'Payment tracking', 'Financial reports']};
+    Admin: { permissions: ['Full system access', 'User management', 'All reports', 'System settings', 'Data export'], color: '#8b5cf6', gradient: 'linear-gradient(135deg, #8b5cf6, #7c3aed)' },
+    Operator: { permissions: ['Vehicle entry', 'Weighbridge', 'AI detection', 'Basic reports'], color: '#3b82f6', gradient: 'linear-gradient(135deg, #3b82f6, #2563eb)' },
+    Security: { permissions: ['Entry/exit verification', 'NFC scanning', 'Alert monitoring'], color: '#10b981', gradient: 'linear-gradient(135deg, #10b981, #059669)' },
+    Accounts: { permissions: ['Billing', 'Invoice generation', 'Payment tracking', 'Financial reports'], color: '#f59e0b', gradient: 'linear-gradient(135deg, #f59e0b, #d97706)' },
+  };
+
+  const roleColorMap = {
+    Admin: { bg: 'rgba(139, 92, 246, 0.1)', text: '#7c3aed', glow: 'badge-glow-purple' },
+    Operator: { bg: 'rgba(59, 130, 246, 0.1)', text: '#2563eb', glow: 'badge-glow-blue' },
+    Security: { bg: 'rgba(16, 185, 129, 0.1)', text: '#059669', glow: 'badge-glow-green' },
+    Accounts: { bg: 'rgba(245, 158, 11, 0.1)', text: '#d97706', glow: 'badge-glow-orange' },
+  };
+
+  const summaryCards = [
+    { title: t.totalEmployees, value: employees.length, icon: Users, color: '#3b82f6', gradient: 'linear-gradient(135deg, #3b82f6, #6366f1)' },
+    { title: t.operators, value: employees.filter(e => e.role === 'Operator').length, icon: UserCog, color: '#10b981', gradient: 'linear-gradient(135deg, #10b981, #059669)' },
+    { title: t.departments, value: 4, icon: DollarSign, color: '#f59e0b', gradient: 'linear-gradient(135deg, #f59e0b, #d97706)' },
+  ];
 
   return (
     <div className="p-8">
       <div className="mb-8">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Employee Management</h1>
-            <p className="text-gray-600 mt-1">Manage staff members and role assignments</p>
+            <h1 className="text-3xl font-bold text-gray-900" style={{ fontFamily: 'Outfit, sans-serif' }}>{t.employeeManagement}</h1>
+            <p className="text-gray-500 mt-1">{t.manageStaffRoles}</p>
           </div>
-          <button className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+          <button className="flex items-center gap-2 px-6 py-3 rounded-xl text-white font-medium transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+            style={{ background: 'linear-gradient(135deg, #4f46e5, #7c3aed)', boxShadow: '0 4px 15px rgba(79, 70, 229, 0.3)' }}>
             <UserPlus className="w-5 h-5" />
-            Add Employee
+            {t.addEmployee}
           </button>
         </div>
       </div>
 
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-          <div className="flex items-center gap-3 mb-2">
-            <Users className="w-5 h-5 text-blue-600" />
-            <h3 className="font-semibold text-gray-900">Total Employees</h3>
-          </div>
-          <p className="text-3xl font-bold text-gray-900">{employees.length}</p>
-        </div>
-
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-          <div className="flex items-center gap-3 mb-2">
-            <UserCog className="w-5 h-5 text-green-600" />
-            <h3 className="font-semibold text-gray-900">Operators</h3>
-          </div>
-          <p className="text-3xl font-bold text-gray-900">{employees.filter(e => e.role === 'Operator').length}</p>
-        </div>
-
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-          <div className="flex items-center gap-3 mb-2">
-            <DollarSign className="w-5 h-5 text-orange-600" />
-            <h3 className="font-semibold text-gray-900">Departments</h3>
-          </div>
-          <p className="text-3xl font-bold text-gray-900">4</p>
-        </div>
+        {summaryCards.map((card, i) => {
+          const Icon = card.icon;
+          return (
+            <div key={i} className="glass-card rounded-2xl p-6 card-hover-lift"
+              style={{ borderTop: `3px solid ${card.color}`, animation: `fade-in-up 0.5s ease-out ${i * 0.1}s both` }}>
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center"
+                  style={{ background: card.gradient }}>
+                  <Icon className="w-5 h-5 text-white" />
+                </div>
+                <h3 className="font-bold text-gray-900">{card.title}</h3>
+              </div>
+              <p className="text-3xl font-bold text-gray-900">{card.value}</p>
+            </div>
+          );
+        })}
       </div>
 
       {/* Role Permissions */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        {Object.entries(rolePermissions).map(([role, permissions]) => (
-          <div key={role} className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">{role}</h3>
-            <ul className="space-y-2">
-              {permissions.map((permission, index) => (
-                <li key={index} className="flex items-start gap-2 text-sm text-gray-700">
-                  <span className="text-green-600 mt-0.5">✓</span>
+        {Object.entries(rolePermissions).map(([role, data], i) => (
+          <div key={role} className="glass-card rounded-2xl p-6 card-hover-lift"
+            style={{ animation: `fade-in-up 0.5s ease-out ${i * 0.1}s both` }}>
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center"
+                style={{ background: data.gradient }}>
+                <Shield className="w-5 h-5 text-white" />
+              </div>
+              <h3 className="text-lg font-bold text-gray-900">{role}</h3>
+            </div>
+            <ul className="space-y-2.5">
+              {data.permissions.map((permission, index) => (
+                <li key={index} className="flex items-center gap-2.5 text-sm text-gray-600">
+                  <div className="w-5 h-5 rounded-md flex items-center justify-center flex-shrink-0"
+                    style={{ background: `${data.color}15` }}>
+                    <Check className="w-3 h-3" style={{ color: data.color }} />
+                  </div>
                   {permission}
                 </li>
               ))}
@@ -75,63 +95,67 @@ export function Employees() {
       </div>
 
       {/* Employee List */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-        <div className="p-6 border-b border-gray-200">
-          <h2 className="text-xl font-semibold text-gray-900">All Employees</h2>
+      <div className="glass-card rounded-2xl overflow-hidden">
+        <div className="p-6" style={{ borderBottom: '1px solid rgba(0,0,0,0.06)' }}>
+          <h2 className="text-xl font-bold text-gray-900" style={{ fontFamily: 'Outfit, sans-serif' }}>{t.allEmployees || 'All Employees'}</h2>
         </div>
         <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead className="bg-gray-50">
+          <table className="w-full premium-table">
+            <thead>
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Employee ID</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Role</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Department</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Phone</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Join Date</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+                <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{t.name}</th>
+                <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{t.role}</th>
+                <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{t.department}</th>
+                <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{t.contact}</th>
+                <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{t.joinDate}</th>
+                <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{t.status}</th>
+                <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{t.actions}</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200">
-              {employees.map((employee) => (
-                <tr key={employee.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 font-medium text-gray-900">{employee.id}</td>
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                        <UserCog className="w-5 h-5 text-blue-600" />
+            <tbody className="divide-y divide-gray-100">
+              {employees.map((employee) => {
+                const rc = roleColorMap[employee.role] || roleColorMap.Operator;
+                return (
+                  <tr key={employee.id} className="hover:bg-indigo-50/30 transition-colors">
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm"
+                          style={{ background: rolePermissions[employee.role]?.gradient || 'linear-gradient(135deg, #6366f1, #8b5cf6)' }}>
+                          {employee.name.split(' ').map(n => n[0]).join('')}
+                        </div>
+                        <div>
+                          <p className="font-bold text-gray-900">{employee.name}</p>
+                          <p className="text-xs text-gray-400">{employee.id}</p>
+                        </div>
                       </div>
-                      <span className="font-medium text-gray-900">{employee.name}</span>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4">
-                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                      employee.role === 'Admin' ? 'bg-purple-100 text-purple-700' :
-                      employee.role === 'Operator' ? 'bg-blue-100 text-blue-700' :
-                      employee.role === 'Security' ? 'bg-green-100 text-green-700' :
-                      'bg-orange-100 text-orange-700'
-                    }`}>
-                      {employee.role}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 text-gray-700">{employee.department}</td>
-                  <td className="px-6 py-4 text-gray-700">{employee.phone}</td>
-                  <td className="px-6 py-4 text-gray-700">{employee.email}</td>
-                  <td className="px-6 py-4 text-gray-700">{employee.joinDate}</td>
-                  <td className="px-6 py-4">
-                    <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">
-                      {employee.status}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4">
-                    <button className="text-blue-600 hover:text-blue-700 font-medium text-sm">
-                      View Details
-                    </button>
-                  </td>
-                </tr>
-              ))}
+                    </td>
+                    <td className="px-6 py-4">
+                      <span className={`px-3 py-1 rounded-full text-xs font-bold ${rc.glow}`}
+                        style={{ background: rc.bg, color: rc.text }}>
+                        {employee.role}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 text-gray-600 font-medium">{employee.department}</td>
+                    <td className="px-6 py-4">
+                      <p className="text-gray-600 text-sm">{employee.phone}</p>
+                      <p className="text-gray-400 text-xs">{employee.email}</p>
+                    </td>
+                    <td className="px-6 py-4 text-gray-500">{employee.joinDate}</td>
+                    <td className="px-6 py-4">
+                      <span className="px-3 py-1 rounded-full text-xs font-bold badge-glow-green"
+                        style={{ background: 'rgba(34, 197, 94, 0.1)', color: '#16a34a' }}>
+                        {employee.status}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4">
+                      <button className="flex items-center gap-1 font-medium text-sm transition-colors"
+                        style={{ color: '#6366f1' }}>
+                        {t.view} <ArrowUpRight className="w-3.5 h-3.5" />
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>

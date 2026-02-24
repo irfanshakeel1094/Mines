@@ -1,11 +1,13 @@
 import { Network, Camera, Radio, Scale, Shield, FileText } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 export function SystemArchitecture() {
+  const { t } = useLanguage();
   const hardware = [
-    { name: 'CCTV Cameras', icon: Camera, description: 'AI-enabled material detection', status: 'Online' },
-    { name: 'NFC Readers', icon: Radio, description: 'Vehicle identification', status: 'Online' },
-    { name: 'Weighbridge', icon: Scale, description: 'Automated weight capture', status: 'Online' },
-    { name: 'Network Gateway', icon: Network, description: 'Secure connectivity', status: 'Online' },
+    { name: 'CCTV Cameras', icon: Camera, description: 'AI-enabled material detection', status: t.online || 'Online' },
+    { name: 'NFC Readers', icon: Radio, description: 'Vehicle identification', status: t.online || 'Online' },
+    { name: 'Weighbridge', icon: Scale, description: 'Automated weight capture', status: t.online || 'Online' },
+    { name: 'Network Gateway', icon: Network, description: 'Secure connectivity', status: t.online || 'Online' },
   ];
 
   const securityFeatures = [
@@ -20,13 +22,13 @@ export function SystemArchitecture() {
   return (
     <div className="p-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">System Architecture</h1>
-        <p className="text-gray-600 mt-1">Complete system overview and infrastructure</p>
+        <h1 className="text-3xl font-bold text-gray-900">{t.systemArchitecture}</h1>
+        <p className="text-gray-600 mt-1">{t.systemOverview}</p>
       </div>
 
       {/* Hardware Integration */}
       <div className="mb-8">
-        <h2 className="text-xl font-semibold text-gray-900 mb-4">Hardware Integration</h2>
+        <h2 className="text-xl font-semibold text-gray-900 mb-4">{t.hardwareIntegration}</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {hardware.map((item, index) => {
             const Icon = item.icon;
@@ -95,7 +97,7 @@ export function SystemArchitecture() {
       <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-xl shadow-sm p-8 text-white">
         <div className="flex items-center gap-3 mb-6">
           <Shield className="w-8 h-8 text-green-400" />
-          <h2 className="text-2xl font-bold">Data Security & Features</h2>
+          <h2 className="text-2xl font-bold">{t.securityFeatures}</h2>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {securityFeatures.map((feature, index) => (
