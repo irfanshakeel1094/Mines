@@ -10,10 +10,15 @@ import { Customers } from "./components/Customers";
 import { Employees } from "./components/Employees";
 import { Billing } from "./components/Billing";
 import { SystemArchitecture } from "./components/SystemArchitecture";
+import { Login } from "./components/Login";
 
 export const router = createBrowserRouter([
   {
     path: "/",
+    Component: Login,
+  },
+  {
+    path: "/dashboard",
     Component: Layout,
     children: [
       { index: true, Component: Dashboard },

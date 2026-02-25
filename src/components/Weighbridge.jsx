@@ -1,15 +1,17 @@
 import { useState } from 'react';
 import { Scale, TrendingUp, Truck, Play, CheckCircle } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 export function Weighbridge() {
+  const { t } = useLanguage();
   const [currentWeight, setCurrentWeight] = useState(0);
   const [isWeighing, setIsWeighing] = useState(false);
   const [weighingComplete, setWeighingComplete] = useState(false);
 
   const todayStats = [
-    { label: 'Vehicles Today', value: '87', icon: Truck, color: 'bg-blue-500' },
-    { label: 'Total Weight', value: '2,845T', icon: TrendingUp, color: 'bg-green-500' },
-    { label: 'Avg Weight', value: '32.7T', icon: Scale, color: 'bg-purple-500' },
+    { label: t.vehiclesToday, value: '87', icon: Truck, color: '#3b82f6', gradient: 'linear-gradient(135deg, #3b82f6, #6366f1)' },
+    { label: t.totalWeight, value: '2,845T', icon: TrendingUp, color: '#10b981', gradient: 'linear-gradient(135deg, #10b981, #059669)' },
+    { label: t.avgWeight, value: '32.7T', icon: Scale, color: '#8b5cf6', gradient: 'linear-gradient(135deg, #8b5cf6, #7c3aed)' },
   ];
 
   const recentWeighings = [
@@ -23,10 +25,8 @@ export function Weighbridge() {
     setIsWeighing(true);
     setWeighingComplete(false);
     setCurrentWeight(0);
-
-    // Simulate weight increase
     let weight = 0;
-    const targetWeight = 25000 + Math.random() * 20000; // Random weight between 25-45 tons (in kg)
+    const targetWeight = 25000 + Math.random() * 20000;
     const interval = setInterval(() => {
       weight += 1000 + Math.random() * 2000;
       if (weight >= targetWeight) {
@@ -41,153 +41,120 @@ export function Weighbridge() {
     }, 100);
   };
 
-  const formatWeight = (kg) => {
-    return (kg / 1000).toFixed(2);
-  };
+  const formatWeight = (kg) => (kg / 1000).toFixed(2);
 
   return (
     <div className="p-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Weighbridge Management</h1>
-        <p className="text-gray-600 mt-1">Real-time vehicle weighing and tracking</p>
+        <h1 className="text-3xl font-bold text-gray-900" style={{ fontFamily: 'Outfit, sans-serif' }}>{t.weighbridgeManagement}</h1>
+        <p className="text-gray-500 mt-1">{t.realTimeWeighing}</p>
       </div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {todayStats.map((stat, index) => {
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        {todayStats.map((stat, i) => {
           const Icon = stat.icon;
           return (
-            <div key={index} className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-              <div className="flex items-center gap-4">
-                <div className={`${stat.color} p-3 rounded-lg`}>
-                  <Icon className="w-6 h-6 text-white" />
+            <div key={i} className="glass-card rounded-2xl p-6 card-hover-lift"
+              style={{ borderTop: `3px solid ${stat.color}`, animation: `fade-in-up 0.5s ease-out ${i * 0.1}s both` }}>
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: stat.gradient }}>
+                  <Icon className="w-5 h-5 text-white" />
                 </div>
-                <div>
-                  <p className="text-gray-600 text-sm">{stat.label}</p>
-                  <p className="text-3xl font-bold text-gray-900">{stat.value}</p>
-                </div>
+                <h3 className="font-bold text-gray-900">{stat.label}</h3>
               </div>
+              <p className="text-3xl font-bold text-gray-900">{stat.value}</p>
             </div>
           );
         })}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Active Weighing */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">Active Weighbridge</h2>
-          
-          {/* Weight Display */}
-          <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-lg p-8 mb-6">
+        <div className="glass-card rounded-2xl p-6">
+          <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2" style={{ fontFamily: 'Outfit, sans-serif' }}>
+            <span className="w-1.5 h-6 rounded-full" style={{ background: 'linear-gradient(180deg, #3b82f6, #6366f1)' }} />
+            Active Weighbridge
+          </h2>
+          <div className="rounded-2xl p-8 mb-6 relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #0f172a, #1e1b4b, #0f172a)' }}>
+            <div className="absolute top-0 right-0 w-40 h-40 rounded-full blur-3xl opacity-15" style={{ background: 'radial-gradient(circle, #6366f1, transparent)' }} />
             <div className="flex items-center justify-center mb-4">
-              <Scale className="w-12 h-12 text-blue-400" />
-            </div>
-            <div className="text-center">
-              <div className="text-6xl font-bold text-white mb-2 font-mono">
-                {formatWeight(currentWeight)}
+              <div className="w-16 h-16 rounded-2xl flex items-center justify-center animate-breathing" style={{ background: 'linear-gradient(135deg, #3b82f6, #6366f1)' }}>
+                <Scale className="w-8 h-8 text-white" />
               </div>
-              <div className="text-2xl text-gray-400">TONS</div>
+            </div>
+            <div className="text-center relative z-10">
+              <div className="text-6xl font-black text-white mb-2" style={{ fontFamily: 'Outfit, monospace' }}>{formatWeight(currentWeight)}</div>
+              <div className="text-xl font-medium" style={{ color: 'rgba(148, 163, 184, 0.8)' }}>TONS</div>
               {isWeighing && (
                 <div className="mt-4">
-                  <div className="w-full bg-gray-700 rounded-full h-2">
-                    <div className="bg-blue-500 h-2 rounded-full transition-all duration-300 animate-pulse" style={{ width: '75%' }} />
+                  <div className="w-full rounded-full h-2" style={{ background: 'rgba(255,255,255,0.1)' }}>
+                    <div className="h-2 rounded-full animate-pulse" style={{ width: '75%', background: 'linear-gradient(90deg, #3b82f6, #6366f1)' }} />
                   </div>
                 </div>
               )}
               {weighingComplete && (
-                <div className="mt-4 flex items-center justify-center gap-2 text-green-400">
-                  <CheckCircle className="w-5 h-5" />
-                  <span className="font-medium">Weighing Complete</span>
+                <div className="mt-4 flex items-center justify-center gap-2" style={{ color: '#22c55e' }}>
+                  <CheckCircle className="w-5 h-5" /><span className="font-bold">{t.complete}</span>
                 </div>
               )}
             </div>
           </div>
-
-          {/* Vehicle Details Form */}
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Vehicle ID</label>
-              <input
-                type="text"
-                placeholder="TRK-XXX"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
+              <label className="block text-sm font-bold text-gray-700 mb-2">{t.vehicleId}</label>
+              <input type="text" placeholder="TRK-XXX" className="w-full px-4 py-3 rounded-xl" style={{ background: 'rgba(99,102,241,0.04)', border: '2px solid rgba(0,0,0,0.08)' }} />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Driver Name</label>
-              <input
-                type="text"
-                placeholder="Enter driver name"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
+              <label className="block text-sm font-bold text-gray-700 mb-2">{t.driver}</label>
+              <input type="text" placeholder="Enter driver name" className="w-full px-4 py-3 rounded-xl" style={{ background: 'rgba(99,102,241,0.04)', border: '2px solid rgba(0,0,0,0.08)' }} />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Material Type</label>
-              <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                <option>Coal Grade A</option>
-                <option>Coal Grade B</option>
-                <option>Iron Ore</option>
-                <option>Limestone</option>
-                <option>Copper Ore</option>
+              <label className="block text-sm font-bold text-gray-700 mb-2">{t.material}</label>
+              <select className="w-full px-4 py-3 rounded-xl" style={{ background: 'rgba(99,102,241,0.04)', border: '2px solid rgba(0,0,0,0.08)' }}>
+                <option>Coal Grade A</option><option>Coal Grade B</option><option>Iron Ore</option><option>Limestone</option>
               </select>
             </div>
-            <button
-              onClick={handleStartWeighing}
-              disabled={isWeighing}
-              className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white px-6 py-3 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
-            >
-              <Play className="w-5 h-5" />
-              {isWeighing ? 'Weighing...' : 'Start Weighing'}
+            <button onClick={handleStartWeighing} disabled={isWeighing}
+              className="w-full rounded-xl font-bold text-white px-6 py-4 flex items-center justify-center gap-2 transition-all duration-300 hover:scale-[1.02]"
+              style={{ background: 'linear-gradient(135deg, #4f46e5, #7c3aed)', boxShadow: '0 8px 25px rgba(79, 70, 229, 0.3)' }}>
+              <Play className="w-5 h-5" />{isWeighing ? `${t.weighing || 'Weighing'}...` : t.startWeighing}
             </button>
             {weighingComplete && (
-              <button className="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors">
-                Save Record
+              <button className="w-full rounded-xl font-bold text-white px-6 py-3 flex items-center justify-center gap-2 transition-all hover:scale-[1.02]"
+                style={{ background: 'linear-gradient(135deg, #22c55e, #10b981)' }}>
+                <CheckCircle className="w-5 h-5" />{t.save || 'Save Record'}
               </button>
             )}
           </div>
         </div>
 
-        {/* Recent Weighings */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">Recent Weighings</h2>
+        <div className="glass-card rounded-2xl p-6">
+          <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2" style={{ fontFamily: 'Outfit, sans-serif' }}>
+            <span className="w-1.5 h-6 rounded-full" style={{ background: 'linear-gradient(180deg, #10b981, #059669)' }} />
+            {t.recentWeighings}
+          </h2>
           <div className="space-y-4">
-            {recentWeighings.map((record) => (
-              <div key={record.id} className="p-4 bg-gray-50 rounded-lg border border-gray-200">
+            {recentWeighings.map((record, i) => (
+              <div key={record.id} className="p-4 rounded-xl card-hover-lift"
+                style={{ background: 'rgba(99,102,241,0.02)', border: '1px solid rgba(99,102,241,0.08)', animation: `fade-in-up 0.4s ease-out ${i * 0.08}s both` }}>
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                      <Truck className="w-5 h-5 text-blue-600" />
+                    <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'rgba(59,130,246,0.1)' }}>
+                      <Truck className="w-5 h-5" style={{ color: '#3b82f6' }} />
                     </div>
                     <div>
-                      <p className="font-semibold text-gray-900">{record.id}</p>
-                      <p className="text-sm text-gray-600">{record.driver}</p>
+                      <p className="font-bold text-gray-900">{record.id}</p>
+                      <p className="text-sm text-gray-500">{record.driver}</p>
                     </div>
                   </div>
-                  <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">
-                    {record.status}
-                  </span>
+                  <span className="px-3 py-1 rounded-full text-xs font-bold badge-glow-green" style={{ background: 'rgba(34,197,94,0.1)', color: '#16a34a' }}>{record.status}</span>
                 </div>
                 <div className="grid grid-cols-4 gap-3 text-sm">
-                  <div>
-                    <p className="text-gray-500 text-xs">Material</p>
-                    <p className="text-gray-900 font-medium">{record.material}</p>
-                  </div>
-                  <div>
-                    <p className="text-gray-500 text-xs">Tare</p>
-                    <p className="text-gray-900 font-medium">{record.tareWeight}T</p>
-                  </div>
-                  <div>
-                    <p className="text-gray-500 text-xs">Gross</p>
-                    <p className="text-gray-900 font-medium">{record.grossWeight}T</p>
-                  </div>
-                  <div>
-                    <p className="text-gray-500 text-xs">Net</p>
-                    <p className="text-blue-600 font-bold">{record.netWeight}T</p>
-                  </div>
+                  <div><p className="text-gray-400 text-xs">{t.material}</p><p className="text-gray-900 font-bold">{record.material}</p></div>
+                  <div><p className="text-gray-400 text-xs">{t.tareWeight}</p><p className="text-gray-900 font-medium">{record.tareWeight}T</p></div>
+                  <div><p className="text-gray-400 text-xs">{t.grossWeight}</p><p className="text-gray-900 font-medium">{record.grossWeight}T</p></div>
+                  <div><p className="text-gray-400 text-xs">{t.netWeight}</p><p className="font-bold text-gradient">{record.netWeight}T</p></div>
                 </div>
-                <div className="mt-2 pt-2 border-t border-gray-200">
-                  <p className="text-xs text-gray-500">{record.time}</p>
-                </div>
+                <div className="mt-2 pt-2" style={{ borderTop: '1px solid rgba(0,0,0,0.04)' }}><p className="text-xs text-gray-400">{record.time}</p></div>
               </div>
             ))}
           </div>

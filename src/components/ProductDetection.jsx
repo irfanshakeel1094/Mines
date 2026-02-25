@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { Camera, Upload, Zap, CheckCircle, XCircle, AlertTriangle } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 export function ProductDetection() {
+  const { t } = useLanguage();
   const [isScanning, setIsScanning] = useState(false);
   const [detectionResult, setDetectionResult] = useState(null);
   const [fraudAlert, setFraudAlert] = useState(false);
@@ -55,8 +57,8 @@ export function ProductDetection() {
   return (
     <div className="p-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">AI Product Detection</h1>
-        <p className="text-gray-600 mt-1">Automated material identification and fraud detection</p>
+        <h1 className="text-3xl font-bold text-gray-900">{t.aiProductDetection}</h1>
+        <p className="text-gray-600 mt-1">{t.materialIdentification}</p>
       </div>
 
       {/* Fraud Alert */}
@@ -65,7 +67,7 @@ export function ProductDetection() {
           <div className="flex items-start gap-4">
             <AlertTriangle className="w-8 h-8 text-red-600 flex-shrink-0" />
             <div className="flex-1">
-              <h3 className="text-xl font-bold text-red-900 mb-2">⚠️ FRAUD DETECTED!</h3>
+              <h3 className="text-xl font-bold text-red-900 mb-2">⚠️ {t.fraudAlert?.toUpperCase() || 'FRAUD DETECTED'}!</h3>
               <p className="text-red-800 font-medium mb-2">Material mismatch identified</p>
               <div className="grid grid-cols-2 gap-4 bg-white rounded-lg p-4">
                 <div>
