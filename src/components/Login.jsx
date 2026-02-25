@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
-import { Shield, User, Lock, Eye, EyeOff, LogIn, Sparkles, Check, Zap, Globe, ArrowRight, Mountain, KeyRound, TrendingUp, Activity, Database } from 'lucide-react';
+import { Shield, User, Lock, Eye, EyeOff, LogIn, ArrowRight, Mountain, Zap, Globe } from 'lucide-react';
 
 export function Login() {
   const navigate = useNavigate();
@@ -11,31 +11,20 @@ export function Login() {
   const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const [usernameFocused, setUsernameFocused] = useState(false);
-  const [passwordFocused, setPasswordFocused] = useState(false);
 
   useEffect(() => {
-    const t = setTimeout(() => setMounted(true), 50);
-    // Load Google Fonts
+    const t = setTimeout(() => setMounted(true), 100);
     const link = document.createElement('link');
-    link.href = 'https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap';
+    link.href = 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap';
     link.rel = 'stylesheet';
     document.head.appendChild(link);
     return () => clearTimeout(t);
   }, []);
 
-  /* ─── Color Theory: Split-complementary palette ─── 
-     Primary:     Indigo #6366f1 / Violet #8b5cf6
-     Warm accent:  Amber/Gold #f59e0b / #fbbf24
-     Cool accent:  Cyan/Teal #06b6d4
-     Success:      Emerald #10b981
-     Danger/Weak:  Rose #f43f5e
-  */
-
   const roles = [
-    { id: 'admin', name: 'Administrator', icon: Shield, color: '#8b5cf6', gradient: 'linear-gradient(135deg, #8b5cf6, #6d28d9)' },
-    { id: 'operator', name: 'Operator', icon: Zap, color: '#f59e0b', gradient: 'linear-gradient(135deg, #f59e0b, #d97706)' },
-    { id: 'security', name: 'Security', icon: Globe, color: '#06b6d4', gradient: 'linear-gradient(135deg, #06b6d4, #0891b2)' },
+    { id: 'admin', name: 'Admin', icon: Shield, color: '#818cf8', bg: '#818cf820' },
+    { id: 'operator', name: 'Operator', icon: Zap, color: '#fbbf24', bg: '#fbbf2420' },
+    { id: 'security', name: 'Security', icon: Globe, color: '#22d3ee', bg: '#22d3ee20' },
   ];
 
   const handleLogin = (e) => {
@@ -48,16 +37,6 @@ export function Login() {
       navigate('/dashboard');
     }, 1400);
   };
-
-  const particles = Array.from({ length: 30 }, (_, i) => ({
-    id: i,
-    size: Math.random() * 4 + 1.5,
-    x: Math.random() * 100,
-    y: Math.random() * 100,
-    delay: Math.random() * 8,
-    duration: Math.random() * 12 + 10,
-    opacity: Math.random() * 0.35 + 0.15,
-  }));
 
   const getPasswordStrength = () => {
     if (!password) return { level: 0, label: '', color: 'transparent' };
@@ -75,821 +54,468 @@ export function Login() {
 
   return (
     <div
-      className="min-h-screen flex items-center justify-center relative overflow-hidden"
+      className="login-page"
       style={{
-        background: 'linear-gradient(135deg, #0f0a1e 0%, #1a1040 25%, #0d1a35 50%, #0a1628 75%, #12102e 100%)',
-        backgroundSize: '400% 400%',
-        animation: 'gradient-shift 20s ease infinite',
+        minHeight: '100vh',
+        display: 'flex',
+        fontFamily: "'Inter', system-ui, sans-serif",
+        background: '#050816',
+        position: 'relative',
+        overflow: 'hidden',
       }}
     >
-      {/* ═══ Animated Background ═══ */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {/* Primary indigo blob — top right */}
-        <div className="absolute w-[700px] h-[700px] rounded-full blur-[140px]"
-          style={{ background: 'radial-gradient(circle, rgba(99,102,241,0.20) 0%, transparent 70%)', top: '-18%', right: '-8%', animation: 'float 14s ease-in-out infinite' }}
-        />
-        {/* Warm amber blob — bottom left (complementary warmth) */}
-        <div className="absolute w-[500px] h-[500px] rounded-full blur-[120px]"
-          style={{ background: 'radial-gradient(circle, rgba(245,158,11,0.08) 0%, transparent 70%)', bottom: '-12%', left: '-6%', animation: 'float 18s ease-in-out infinite reverse' }}
-        />
-        {/* Violet blob — center */}
-        <div className="absolute w-[450px] h-[450px] rounded-full blur-[100px]"
-          style={{ background: 'radial-gradient(circle, rgba(139,92,246,0.14) 0%, transparent 70%)', top: '45%', left: '35%', animation: 'float 22s ease-in-out infinite 3s' }}
-        />
-        {/* Cyan accent blob — top left (split-complementary) */}
-        <div className="absolute w-[350px] h-[350px] rounded-full blur-[90px]"
-          style={{ background: 'radial-gradient(circle, rgba(6,182,212,0.08) 0%, transparent 70%)', top: '10%', left: '15%', animation: 'float 16s ease-in-out infinite 2s' }}
-        />
-        {/* Rose accent blob — subtle pop */}
-        <div className="absolute w-[250px] h-[250px] rounded-full blur-[80px]"
-          style={{ background: 'radial-gradient(circle, rgba(244,63,94,0.05) 0%, transparent 70%)', bottom: '25%', right: '20%', animation: 'float 20s ease-in-out infinite 5s' }}
-        />
-
-        {/* Grid overlay */}
-        <div className="absolute inset-0" style={{
-          backgroundImage: 'linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px)',
-          backgroundSize: '64px 64px',
-          opacity: 0.4
+      {/* ═══ Subtle Background ═══ */}
+      <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
+        <div style={{
+          position: 'absolute', width: '800px', height: '800px', borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(99,102,241,0.08), transparent 70%)',
+          top: '-20%', right: '-15%', filter: 'blur(80px)',
         }} />
-        {/* Radial overlay for depth */}
-        <div className="absolute inset-0" style={{
-          background: 'radial-gradient(circle at 50% 50%, transparent 0%, rgba(0,0,0,0.4) 100%)'
+        <div style={{
+          position: 'absolute', width: '600px', height: '600px', borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(139,92,246,0.06), transparent 70%)',
+          bottom: '-15%', left: '-10%', filter: 'blur(80px)',
         }} />
-
-        {/* Particles — mix of indigo, amber, cyan */}
-        {particles.map((p) => {
-          const colors = ['rgba(139,92,246,', 'rgba(245,158,11,', 'rgba(6,182,212,'];
-          const c = colors[p.id % 3];
-          return (
-            <div key={p.id} className="absolute rounded-full"
-              style={{
-                width: p.size + 'px', height: p.size + 'px',
-                left: p.x + '%', top: p.y + '%',
-                background: `${c}${p.opacity})`,
-                boxShadow: `0 0 ${p.size * 4}px ${c}0.2)`,
-                animation: `particle-float ${p.duration}s ease-in-out ${p.delay}s infinite`,
-              }}
-            />
-          );
-        })}
+        {/* Grid pattern */}
+        <div style={{
+          position: 'absolute', inset: 0, opacity: 0.3,
+          backgroundImage: 'linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)',
+          backgroundSize: '80px 80px',
+        }} />
       </div>
 
-      {/* ═══ Main Content ═══ */}
+      {/* ═══ Left Panel — Branding ═══ */}
       <div
-        className={`relative z-10 w-full max-w-6xl mx-auto px-6 lg:px-12 py-10 transition-all duration-1000 ease-out ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-          }`}
+        className="login-left"
+        style={{
+          flex: '1 1 55%',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          padding: '4rem 6rem',
+          position: 'relative',
+          opacity: mounted ? 1 : 0,
+          transform: mounted ? 'translateX(0)' : 'translateX(-30px)',
+          transition: 'all 0.8s cubic-bezier(0.22, 1, 0.36, 1)',
+        }}
       >
-        <div className="grid lg:grid-cols-2 gap-12 xl:gap-20 items-center">
-
-          {/* ── LEFT — Branding ── */}
-          <div className="hidden lg:flex flex-col justify-center pr-10 xl:pr-16 relative">
-            {/* Decorative separator — gradient uses both primary and warm accent */}
-            <div className="absolute right-0 top-[8%] bottom-[8%] w-px"
-              style={{ background: 'linear-gradient(to bottom, transparent, rgba(139,92,246,0.2), rgba(245,158,11,0.08), rgba(6,182,212,0.12), transparent)' }}
-            />
-
-            {/* Logo */}
-            <div className="relative inline-block mb-10 group/logo cursor-default" style={{ animation: 'fade-in-up 0.6s ease-out 0.1s both' }}>
-              <div className="relative w-[76px] h-[76px] rounded-2xl flex items-center justify-center transition-all duration-500 group-hover/logo:scale-105 group-hover/logo:rotate-3"
-                style={{
-                  background: 'linear-gradient(135deg, #6366f1, #8b5cf6, #a855f7)',
-                  boxShadow: '0 10px 36px rgba(99,102,241,0.35)',
-                  animation: 'float 6s ease-in-out infinite, glow-pulse 3s ease-in-out infinite',
-                }}
-              >
-                <Mountain className="w-9 h-9 text-white transition-transform duration-500 group-hover/logo:scale-110" />
-                {/* Online indicator — using success emerald */}
-                <div className="absolute -top-1 -right-1 w-[18px] h-[18px] rounded-full flex items-center justify-center transition-all duration-300 group-hover/logo:scale-125"
-                  style={{ background: 'linear-gradient(135deg, #10b981, #059669)', boxShadow: '0 2px 8px rgba(16,185,129,0.45)', animation: 'breathing 3s ease-in-out infinite' }}
-                >
-                  <div className="w-[7px] h-[7px] bg-white rounded-full animate-pulse" />
-                </div>
-              </div>
-              <div className="absolute -inset-3 rounded-2xl border border-white/[0.05] transition-all duration-500 group-hover/logo:border-white/[0.12] group-hover/logo:-inset-4" />
-            </div>
-
-            {/* Title */}
-            <div className="mb-10" style={{ animation: 'fade-in-up 0.6s ease-out 0.2s both' }}>
-              <h1 className="text-[3.5rem] leading-[1.08] font-black tracking-tight mb-4" style={{ fontFamily: 'Outfit, sans-serif' }}>
-                <span className="text-white">Smart</span>
-                <span className="text-gradient">Mine</span>
-                <span className="text-white/70 ml-3">ERP</span>
-              </h1>
-              <p className="text-[17px] font-medium flex items-center gap-3" style={{ color: 'rgba(167,139,250,0.75)' }}>
-                <Sparkles className="w-[18px] h-[18px] animate-pulse" style={{ color: '#fbbf24' }} />
-                <span>AI-Powered Mining Management</span>
-              </p>
-            </div>
-
-            {/* Features — each uses a different color from the palette */}
-            <div className="space-y-6 mb-12">
-              {[
-                { title: 'Real-time Monitoring', desc: 'Track all operations with AI-powered analytics', color: '#06b6d4', icon: Activity },
-                { title: 'Enterprise Security', desc: 'Role-based access with 256-bit encryption', color: '#8b5cf6', icon: Shield },
-                { title: 'Smart Automation', desc: 'Streamline from entry to billing seamlessly', color: '#f59e0b', icon: Zap },
-              ].map((item, i) => {
-                const IconComponent = item.icon;
-                return (
-                  <div key={i} className="flex items-center gap-5 group cursor-default transition-all duration-400 hover:translate-x-2"
-                    style={{ animation: `fade-in-up 0.5s ease-out ${0.35 + i * 0.1}s both` }}
-                  >
-                    <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-400 group-hover:scale-110"
-                      style={{
-                        background: `${item.color}14`,
-                        border: `1px solid ${item.color}25`,
-                        boxShadow: `0 0 0 0 ${item.color}00`,
-                      }}
-                      onMouseEnter={e => e.currentTarget.style.boxShadow = `0 8px 24px ${item.color}25, 0 0 8px ${item.color}15`}
-                      onMouseLeave={e => e.currentTarget.style.boxShadow = `0 0 0 0 ${item.color}00`}
-                    >
-                      <IconComponent className="w-5 h-5 transition-all duration-400 group-hover:scale-125 group-hover:rotate-12" style={{ color: item.color, filter: `drop-shadow(0 2px 8px ${item.color}40)` }} />
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-[16px] text-white/95 group-hover:text-white transition-all duration-300 leading-snug group-hover:tracking-wide">{item.title}</h3>
-                      <p className="text-[14px] leading-relaxed transition-colors duration-300 group-hover:text-indigo-200/70" style={{ color: 'rgba(165,180,252,0.5)' }}>{item.desc}</p>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-
-            {/* Stats — color-coded: emerald for uptime, indigo for mines, amber for vehicles */}
-            <div className="flex gap-10 xl:gap-12 mb-10" style={{ animation: 'fade-in-up 0.5s ease-out 0.7s both' }}>
-              {[
-                { value: '99.9%', label: 'Uptime', color: '#10b981', icon: TrendingUp },
-                { value: '500+', label: 'Mines', color: '#6366f1', icon: Mountain },
-                { value: '50K+', label: 'Vehicles', color: '#f59e0b', icon: Database },
-              ].map((stat, i) => {
-                const StatIcon = stat.icon;
-                return (
-                  <div key={i} className="group cursor-default transition-all duration-400 hover:scale-110 hover:-translate-y-1">
-                    <div className="flex items-center gap-2.5 mb-1">
-                      <p className="text-[32px] font-black tracking-tight tabular-nums transition-all duration-400"
-                        style={{ 
-                          color: stat.color, 
-                          textShadow: `0 0 30px ${stat.color}35, 0 2px 4px ${stat.color}20`,
-                          filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.3))'
-                        }}
-                      >{stat.value}</p>
-                      <StatIcon className="w-5 h-5 opacity-60 transition-all duration-500 group-hover:opacity-100 group-hover:scale-125 group-hover:rotate-12" style={{ color: stat.color, filter: `drop-shadow(0 2px 6px ${stat.color}40)` }} />
-                    </div>
-                    <p className="text-[11px] font-bold tracking-[0.18em] uppercase transition-all duration-300 group-hover:text-indigo-300/60 group-hover:tracking-[0.22em]" style={{ color: 'rgba(148,163,184,0.5)' }}>{stat.label}</p>
-                  </div>
-                );
-              })}
-            </div>
-
-            {/* Trust badges */}
-            <div className="flex items-center gap-3.5" style={{ animation: 'fade-in-up 0.5s ease-out 0.85s both' }}>
-              <div className="flex -space-x-2.5">
-                {['#6366f1', '#06b6d4', '#10b981', '#f59e0b'].map((c, i) => (
-                  <div key={i} className="w-8 h-8 rounded-full border-[2.5px] flex items-center justify-center text-[10px] font-bold text-white transition-all duration-300 hover:scale-125 hover:z-10 hover:-translate-y-1 cursor-default"
-                    style={{ 
-                      background: `linear-gradient(135deg, ${c}, ${c}dd)`, 
-                      borderColor: '#0f0a1e', 
-                      boxShadow: `0 0 12px ${c}40, 0 4px 8px ${c}25` 
-                    }}
-                  >
-                    {String.fromCharCode(65 + i)}
-                  </div>
-                ))}
-              </div>
-              <p className="text-[13px] transition-colors duration-300 hover:text-indigo-300/60" style={{ color: 'rgba(165,180,252,0.45)' }}>
-                Trusted by <span className="font-semibold text-indigo-300/70">500+</span> mining operations
-              </p>
-            </div>
+        {/* Logo */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '48px' }}>
+          <div style={{
+            width: '56px', height: '56px', borderRadius: '16px',
+            background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            boxShadow: '0 8px 32px rgba(99,102,241,0.3)',
+          }}>
+            <Mountain style={{ width: '28px', height: '28px', color: '#fff' }} />
           </div>
-
-          {/* ── RIGHT — Login Card ── */}
-          <div className="flex flex-col items-center justify-center w-full">
-            {/* Mobile Logo */}
-            <div className="lg:hidden text-center mb-10" style={{ animation: 'fade-in-up 0.5s ease-out both' }}>
-              <div className="inline-flex items-center justify-center w-18 h-18 rounded-2xl mb-5 relative"
-                style={{
-                  background: 'linear-gradient(135deg, #6366f1, #8b5cf6, #a855f7)',
-                  boxShadow: '0 10px 32px rgba(99,102,241,0.35)',
-                  animation: 'float 6s ease-in-out infinite, glow-pulse 3s ease-in-out infinite',
-                  width: '72px', height: '72px',
-                }}
-              >
-                <Mountain className="w-8 h-8 text-white" />
-                <div className="absolute -top-1 -right-1 w-[18px] h-[18px] rounded-full flex items-center justify-center"
-                  style={{ background: 'linear-gradient(135deg, #10b981, #059669)', boxShadow: '0 2px 8px rgba(16,185,129,0.4)', animation: 'breathing 3s ease-in-out infinite' }}
-                >
-                  <div className="w-[7px] h-[7px] bg-white rounded-full animate-pulse" />
-                </div>
-              </div>
-              <h1 className="text-3xl font-bold text-white mb-2" style={{ fontFamily: 'Outfit, sans-serif', letterSpacing: '-0.02em' }}>
-                <span>Smart</span>
-                <span className="text-gradient">Mine</span>
-                <span className="text-white/70"> ERP</span>
-              </h1>
-              <p className="text-sm flex items-center justify-center gap-2" style={{ color: 'rgba(167,139,250,0.65)' }}>
-                <Sparkles className="w-4 h-4 animate-pulse" style={{ color: '#fbbf24' }} />
-                <span>AI-Powered Mining Management</span>
-              </p>
-            </div>
-
-            {/* ── Glassmorphism Card ── */}
-            <div className="w-full max-w-md mx-auto">
-              <div
-                className="rounded-3xl p-8 sm:p-10 relative overflow-hidden transition-all duration-700 hover:scale-[1.015]"
-                style={{
-                  background: 'linear-gradient(135deg, rgba(20, 18, 55, 0.75) 0%, rgba(15, 23, 61, 0.85) 50%, rgba(18, 16, 46, 0.75) 100%)',
-                  backdropFilter: 'blur(40px) saturate(180%)',
-                  WebkitBackdropFilter: 'blur(40px) saturate(180%)',
-                  border: '1px solid rgba(139, 92, 246, 0.25)',
-                  boxShadow: '0 32px 80px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(139,92,246,0.2), inset 0 2px 0 rgba(255, 255, 255, 0.1), 0 0 100px rgba(99,102,241,0.12)',
-                }}
-                onMouseEnter={e => e.currentTarget.style.boxShadow = '0 40px 100px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(139,92,246,0.4), inset 0 2px 0 rgba(255, 255, 255, 0.15), 0 0 140px rgba(99,102,241,0.2), 0 0 80px rgba(168,85,247,0.15)'}
-                onMouseLeave={e => e.currentTarget.style.boxShadow = '0 32px 80px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(139,92,246,0.2), inset 0 2px 0 rgba(255, 255, 255, 0.1), 0 0 100px rgba(99,102,241,0.12)'}
-              >
-                {/* Inner gradient overlay */}
-                <div className="absolute inset-0 rounded-3xl pointer-events-none"
-                  style={{ 
-                    background: 'linear-gradient(160deg, rgba(99,102,241,0.10) 0%, rgba(139,92,246,0.06) 30%, transparent 55%, rgba(168,85,247,0.08) 100%)',
-                    opacity: 0.6
-                  }}
-                />
-                {/* Animated shimmer overlay */}
-                <div className="absolute inset-0 rounded-3xl pointer-events-none opacity-40"
-                  style={{ 
-                    background: 'linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.04) 35%, rgba(255,255,255,0.10) 50%, rgba(255,255,255,0.04) 65%, transparent 100%)',
-                    backgroundSize: '200% 200%',
-                    animation: 'shimmer 8s linear infinite'
-                  }}
-                />
-                {/* Top accent bar — gradient uses all 3 palette colors */}
-                <div className="absolute top-0 left-8 right-8 h-[3px] rounded-full"
-                  style={{ 
-                    background: 'linear-gradient(90deg, transparent, rgba(99,102,241,0.7), rgba(139,92,246,0.8), rgba(168,85,247,0.7), transparent)',
-                    boxShadow: '0 0 24px rgba(139,92,246,0.5)'
-                  }}
-                />
-
-                <div className="relative z-10 space-y-8">
-
-                  {/* ── Header ── */}
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-500 hover:scale-110 hover:rotate-6 group/icon"
-                      style={
- {                        background: 'linear-gradient(135deg, rgba(99,102,241,0.30), rgba(139,92,246,0.28), rgba(168,85,247,0.25))',
-                        border: '1px solid rgba(139,92,246,0.35)',
-                        boxShadow: '0 8px 24px rgba(99,102,241,0.25), 0 0 40px rgba(139,92,246,0.15), inset 0 1px 0 rgba(255,255,255,0.15)',
-                        animation: 'breathing 4s ease-in-out infinite, glow-pulse 3s ease-in-out infinite',
-                      }}
-                    >
-                      <KeyRound className="w-5 h-5 transition-all duration-500 group-hover/icon:rotate-12 group-hover/icon:scale-110" style={{ color: '#c7d2fe', filter: 'drop-shadow(0 2px 10px rgba(139,92,246,0.6))' }} />
-                    </div>
-                    <div>
-                      <h2 className="text-[26px] font-extrabold leading-tight transition-all duration-300 hover:tracking-wide" 
-                        style={{ 
-                          fontFamily: 'Outfit, sans-serif', 
-                          letterSpacing: '-0.02em',
-                          background: 'linear-gradient(135deg, #ffffff 0%, #e0e7ff 45%, #c7d2fe 100%)',
-                          WebkitBackgroundClip: 'text',
-                          WebkitTextFillColor: 'transparent',
-                          backgroundClip: 'text',
-                          filter: 'drop-shadow(0 0 30px rgba(199,210,254,0.4))'
-                        }}>
-                        Welcome Back
-                      </h2>
-                      <p className="text-[14px] mt-1 transition-colors duration-300 hover:text-indigo-300/80" style={{ color: 'rgba(165,180,252,0.65)' }}>Sign in to your dashboard</p>
-                    </div>
-                  </div>
-
-                  {/* ── Role Selection ── */}
-                  <div>
-                    <label className="block text-[11px] font-bold mb-4 tracking-[0.18em] uppercase flex items-center gap-2 transition-all duration-300 hover:text-indigo-300/80" style={{ color: 'rgba(199,210,254,0.5)' }}>
-                      <Shield className="w-3.5 h-3.5 transition-transform duration-300 hover:scale-110" style={{ color: 'rgba(139,92,246,0.6)' }} />
-                      Select Role
-                    </label>
-                    <div className="grid grid-cols-3 gap-3">
-                      {roles.map((role, ri) => {
-                        const RoleIcon = role.icon;
-                        const isSelected = selectedRole === role.id;
-                        return (
-                          <button
-                            key={role.id}
-                            type="button"
-                            onClick={() => setSelectedRole(role.id)}
-                            aria-pressed={isSelected}
-                            className="relative flex flex-col items-center justify-center py-5 px-2 rounded-xl transition-all duration-500 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/60 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent group"
-                            style={{
-                              background: isSelected ? 'rgba(255,255,255,0.10)' : 'rgba(255,255,255,0.02)',
-                              border: `1.5px solid ${isSelected ? `${role.color}60` : 'rgba(255,255,255,0.08)'}`,
-                              boxShadow: isSelected ? `0 12px 36px ${role.color}35, inset 0 1px 0 rgba(255,255,255,0.10), 0 0 40px ${role.color}15` : 'none',
-                              transform: isSelected ? 'translateY(-5px) scale(1.03)' : 'translateY(0) scale(1)',
-                              animation: `fade-in-up 0.4s ease-out ${0.1 + ri * 0.07}s both`,
-                            }}
-                            onMouseEnter={e => {
-                              if (!isSelected) {
-                                e.currentTarget.style.borderColor = `${role.color}40`;
-                                e.currentTarget.style.background = 'rgba(255,255,255,0.06)';
-                                e.currentTarget.style.transform = 'translateY(-3px) scale(1.02)';
-                                e.currentTarget.style.boxShadow = `0 10px 28px ${role.color}25, 0 0 20px ${role.color}10`;
-                              }
-                            }}
-                            onMouseLeave={e => {
-                              if (!isSelected) {
-                                e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)';
-                                e.currentTarget.style.background = 'rgba(255,255,255,0.02)';
-                                e.currentTarget.style.transform = 'translateY(0) scale(1)';
-                                e.currentTarget.style.boxShadow = 'none';
-                              }
-                            }}
-                          >
-                            {isSelected && (
-                              <>
-                                <div className="absolute -top-2 -right-2 w-[22px] h-[22px] rounded-full flex items-center justify-center transition-all duration-500"
-                                  style={{ 
-                                    background: 'linear-gradient(135deg, #10b981, #059669)', 
-                                    boxShadow: '0 4px 12px rgba(16,185,129,0.6), 0 0 0 3px rgba(16,185,129,0.2)',
-                                    animation: 'breathing 3s ease-in-out infinite'
-                                  }} 
-                                >
-                                  <Check className="w-3.5 h-3.5 text-white" style={{ filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.3))' }} />
-                                </div>
-                                {/* Selection glow ring */}
-                                <div className="absolute -inset-1 rounded-xl pointer-events-none"
-                                  style={{
-                                    border: `1px solid ${role.color}30`,
-                                    boxShadow: `0 0 20px ${role.color}20, inset 0 0 20px ${role.color}10`,
-                                    animation: 'border-glow 3s ease-in-out infinite'
-                                  }}
-                                />
-                              </>
-                            )}
-                            <div className="w-12 h-12 rounded-lg flex items-center justify-center mb-3 transition-all duration-500 group-hover:scale-115 group-hover:rotate-12"
-                              style={{
-                                background: isSelected ? role.gradient : `${role.color}12`,
-                                boxShadow: isSelected ? `0 8px 24px ${role.color}45, inset 0 2px 0 rgba(255,255,255,0.20)` : 'none',
-                              }}
-                            >
-                              <RoleIcon className="w-5 h-5 text-white transition-all duration-300"
-                                style={{ transform: isSelected ? 'scale(1.05)' : 'scale(1)' }}
-                              />
-                            </div>
-                            <span className="text-[10px] font-bold leading-none transition-colors duration-200"
-                              style={{ color: isSelected ? '#fff' : 'rgba(255,255,255,0.32)', letterSpacing: '0.02em' }}
-                            >
-                              {role.name}
-                            </span>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  {/* ── Form ── */}
-                  <form onSubmit={handleLogin} className="space-y-5">
-
-                    {/* Username Input */}
-                    <div>
-                      <label htmlFor="login-username" className="block text-[11px] font-bold mb-3 tracking-[0.18em] uppercase flex items-center gap-2 transition-all duration-500"
-                        style={{ color: usernameFocused ? '#c7d2fe' : 'rgba(199,210,254,0.40)' }}
-                      >
-                        <User className="w-3.5 h-3.5 transition-all duration-500" 
-                          style={{ 
-                            transform: usernameFocused ? 'scale(1.15) rotate(-6deg)' : 'scale(1)',
-                            filter: usernameFocused ? 'drop-shadow(0 0 6px rgba(199,210,254,0.5))' : 'none'
-                          }} 
-                        />
-                        Username
-                      </label>
-                      <div className="relative group/input">
-                        {/* Animated border glow */}
-                        {usernameFocused && (
-                          <div className="absolute -inset-[2px] rounded-xl pointer-events-none z-0"
-                            style={{
-                              background: 'linear-gradient(135deg, rgba(99,102,241,0.4), rgba(139,92,246,0.5), rgba(168,85,247,0.4))',
-                              filter: 'blur(8px)',
-                              animation: 'glow-pulse 2s ease-in-out infinite'
-                            }}
-                          />
-                        )}
-                        <div className="absolute inset-y-0 left-0 w-12 flex items-center justify-center pointer-events-none z-10">
-                          <div className="relative">
-                            <User className="w-[18px] h-[18px] transition-all duration-500"
-                              style={{ 
-                                color: usernameFocused ? '#c7d2fe' : 'rgba(255,255,255,0.25)',
-                                transform: usernameFocused ? 'scale(1.15) rotate(-3deg)' : 'scale(1)',
-                                filter: usernameFocused ? 'drop-shadow(0 0 12px rgba(199,210,254,0.6))' : 'none'
-                              }}
-                            />
-                            {usernameFocused && (
-                              <div className="absolute inset-0 animate-ping"
-                                style={{
-                                  opacity: 0.3,
-                                  color: '#a78bfa'
-                                }}
-                              >
-                                <User className="w-[18px] h-[18px]" />
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                        <input
-                          id="login-username"
-                          type="text"
-                          value={username}
-                          onChange={(e) => setUsername(e.target.value)}
-                          placeholder="Enter your username"
-                          required
-                          autoComplete="username"
-                          className="w-full pl-12 pr-4 py-4 rounded-xl text-[15px] font-medium text-white bg-transparent transition-all duration-500 outline-none relative z-[1]"
-                          style={{
-                            background: usernameFocused 
-                              ? 'linear-gradient(135deg, rgba(255,255,255,0.11) 0%, rgba(139,92,246,0.08) 100%)' 
-                              : 'rgba(255,255,255,0.04)',
-                            border: `2px solid ${usernameFocused ? 'rgba(139,92,246,0.60)' : 'rgba(255,255,255,0.10)'}`,
-                            boxShadow: usernameFocused
-                              ? '0 0 0 4px rgba(99,102,241,0.20), 0 8px 24px rgba(99,102,241,0.20), 0 0 50px rgba(139,92,246,0.15), inset 0 2px 4px rgba(255,255,255,0.10)'
-                              : '0 2px 8px rgba(0,0,0,0.20), inset 0 2px 4px rgba(255,255,255,0.04)',
-                            transform: usernameFocused ? 'translateY(-3px)' : 'translateY(0)',
-                            letterSpacing: '0.02em',
-                          }}
-                          onFocus={() => setUsernameFocused(true)}
-                          onBlur={() => setUsernameFocused(false)}
-                        />
-                        {/* Bottom accent line */}
-                        <div className="absolute bottom-0 left-4 right-4 h-[2px] rounded-full transition-all duration-500"
-                          style={{
-                            background: usernameFocused 
-                              ? 'linear-gradient(90deg, transparent, rgba(139,92,246,0.8), rgba(99,102,241,0.8), transparent)' 
-                              : 'transparent',
-                            opacity: usernameFocused ? 1 : 0,
-                            boxShadow: usernameFocused ? '0 0 16px rgba(139,92,246,0.6)' : 'none'
-                          }}
-                        />
-                      </div>
-                    </div>
-
-                    {/* Password Input */}
-                    <div>
-                      <label htmlFor="login-password" className="block text-[11px] font-bold mb-3 tracking-[0.18em] uppercase flex items-center gap-2 transition-all duration-500"
-                        style={{ color: passwordFocused ? '#c7d2fe' : 'rgba(199,210,254,0.40)' }}
-                      >
-                        <Lock className="w-3.5 h-3.5 transition-all duration-500" 
-                          style={{ 
-                            transform: passwordFocused ? 'scale(1.15) rotate(-6deg)' : 'scale(1)',
-                            filter: passwordFocused ? 'drop-shadow(0 0 6px rgba(199,210,254,0.5))' : 'none'
-                          }} 
-                        />
-                        Password
-                      </label>
-                      <div className="relative group/input">
-                        {/* Animated border glow */}
-                        {passwordFocused && (
-                          <div className="absolute -inset-[2px] rounded-xl pointer-events-none z-0"
-                            style={{
-                              background: 'linear-gradient(135deg, rgba(99,102,241,0.4), rgba(139,92,246,0.5), rgba(168,85,247,0.4))',
-                              filter: 'blur(8px)',
-                              animation: 'glow-pulse 2s ease-in-out infinite'
-                            }}
-                          />
-                        )}
-                        <div className="absolute inset-y-0 left-0 w-12 flex items-center justify-center pointer-events-none z-10">
-                          <div className="relative">
-                            <Lock className="w-[18px] h-[18px] transition-all duration-500"
-                              style={{ 
-                                color: passwordFocused ? '#c7d2fe' : 'rgba(255,255,255,0.25)',
-                                transform: passwordFocused ? 'scale(1.15) rotate(-3deg)' : 'scale(1)',
-                                filter: passwordFocused ? 'drop-shadow(0 0 12px rgba(199,210,254,0.6))' : 'none'
-                              }}
-                            />
-                            {passwordFocused && (
-                              <div className="absolute inset-0 animate-ping"
-                                style={{
-                                  opacity: 0.3,
-                                  color: '#a78bfa'
-                                }}
-                              >
-                                <Lock className="w-[18px] h-[18px]" />
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                        <input
-                          id="login-password"
-                          type={showPassword ? 'text' : 'password'}
-                          value={password}
-                          onChange={(e) => setPassword(e.target.value)}
-                          placeholder="Enter your password"
-                          required
-                          autoComplete="current-password"
-                          className="w-full pl-12 py-4 rounded-xl text-[15px] font-medium text-white bg-transparent transition-all duration-500 outline-none relative z-[1]"
-                          style={{
-                            paddingRight: '3rem',
-                            background: passwordFocused 
-                              ? 'linear-gradient(135deg, rgba(255,255,255,0.11) 0%, rgba(139,92,246,0.08) 100%)' 
-                              : 'rgba(255,255,255,0.04)',
-                            border: `2px solid ${passwordFocused ? 'rgba(139,92,246,0.60)' : 'rgba(255,255,255,0.10)'}`,
-                            boxShadow: passwordFocused
-                              ? '0 0 0 4px rgba(99,102,241,0.20), 0 8px 24px rgba(99,102,241,0.20), 0 0 50px rgba(139,92,246,0.15), inset 0 2px 4px rgba(255,255,255,0.10)'
-                              : '0 2px 8px rgba(0,0,0,0.20), inset 0 2px 4px rgba(255,255,255,0.04)',
-                            transform: passwordFocused ? 'translateY(-3px)' : 'translateY(0)',
-                            letterSpacing: '0.02em',
-                          }}
-                          onFocus={() => setPasswordFocused(true)}
-                          onBlur={() => setPasswordFocused(false)}
-                        />
-                        {/* Eye toggle button - inside the input field */}
-                        <button
-                          type="button"
-                          onClick={() => setShowPassword(!showPassword)}
-                          aria-label={showPassword ? 'Hide password' : 'Show password'}
-                          className="absolute h-10 w-10 flex items-center justify-center transition-all duration-500 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/60 z-[25] group/eye"
-                          style={{ 
-                            top: '50%',
-                            right: '0.25rem',
-                            transform: 'translateY(-50%)',
-                            color: showPassword ? '#e0e7ff' : (passwordFocused ? '#c7d2fe' : 'rgba(199,210,254,0.50)'),
-                            background: showPassword 
-                              ? 'linear-gradient(135deg, rgba(139,92,246,0.35), rgba(99,102,241,0.30))' 
-                              : 'rgba(15,15,30,0.35)',
-                            backdropFilter: 'blur(12px)',
-                            WebkitBackdropFilter: 'blur(12px)',
-                            border: `1px solid ${showPassword ? 'rgba(139,92,246,0.40)' : 'rgba(255,255,255,0.10)'}`,
-                            boxShadow: showPassword 
-                              ? '0 4px 12px rgba(139,92,246,0.30), inset 0 1px 2px rgba(255,255,255,0.15)' 
-                              : '0 2px 6px rgba(0,0,0,0.25), inset 0 1px 1px rgba(255,255,255,0.05)'
-                          }}
-                          onMouseEnter={(e) => { 
-                            e.currentTarget.style.color = '#ffffff'; 
-                            e.currentTarget.style.background = 'linear-gradient(135deg, rgba(139,92,246,0.50), rgba(99,102,241,0.45))';
-                            e.currentTarget.style.transform = 'translateY(-50%) scale(1.15)';
-                            e.currentTarget.style.boxShadow = '0 6px 20px rgba(139,92,246,0.50), inset 0 2px 4px rgba(255,255,255,0.20)';
-                            e.currentTarget.style.borderColor = 'rgba(139,92,246,0.60)';
-                          }}
-                          onMouseLeave={(e) => { 
-                            e.currentTarget.style.color = showPassword ? '#e0e7ff' : (passwordFocused ? '#c7d2fe' : 'rgba(199,210,254,0.50)');
-                            e.currentTarget.style.background = showPassword 
-                              ? 'linear-gradient(135deg, rgba(139,92,246,0.35), rgba(99,102,241,0.30))' 
-                              : 'rgba(15,15,30,0.35)';
-                            e.currentTarget.style.transform = 'translateY(-50%) scale(1)';
-                            e.currentTarget.style.boxShadow = showPassword 
-                              ? '0 4px 12px rgba(139,92,246,0.30), inset 0 1px 2px rgba(255,255,255,0.15)' 
-                              : '0 2px 6px rgba(0,0,0,0.25), inset 0 1px 1px rgba(255,255,255,0.05)';
-                            e.currentTarget.style.borderColor = showPassword ? 'rgba(139,92,246,0.40)' : 'rgba(255,255,255,0.10)';
-                          }}
-                        >
-                          {showPassword ? (
-                            <EyeOff className="w-5 h-5 transition-all duration-500 group-hover/eye:rotate-12 group-hover/eye:scale-110" 
-                              style={{ filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.4))' }}
-                            />
-                          ) : (
-                            <Eye className="w-5 h-5 transition-all duration-500 group-hover/eye:scale-125" 
-                              style={{ filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.4))' }}
-                            />
-                          )}
-                        </button>
-                        {/* Bottom accent line */}
-                        <div className="absolute bottom-0 left-4 right-4 h-[2px] rounded-full transition-all duration-500"
-                          style={{
-                            background: passwordFocused 
-                              ? 'linear-gradient(90deg, transparent, rgba(139,92,246,0.8), rgba(99,102,241,0.8), transparent)' 
-                              : 'transparent',
-                            opacity: passwordFocused ? 1 : 0,
-                            boxShadow: passwordFocused ? '0 0 16px rgba(139,92,246,0.6)' : 'none'
-                          }}
-                        />
-                      </div>
-
-                      {/* Strength Bar — uses rose/amber/emerald for feedback */}
-                      {password && (
-                        <div className="mt-3.5 flex items-center gap-3">
-                          <div className="flex-1 flex gap-2">
-                            {[1, 2, 3].map(i => (
-                              <div key={i} className="h-[5px] rounded-full flex-1 transition-all duration-700"
-                                style={{
-                                  background: i <= pwStrength.level 
-                                    ? `linear-gradient(90deg, ${pwStrength.color}, ${pwStrength.color}dd)` 
-                                    : 'rgba(255,255,255,0.06)',
-                                  boxShadow: i <= pwStrength.level 
-                                    ? `0 0 12px ${pwStrength.color}40, 0 2px 0 ${pwStrength.color}20, inset 0 1px 0 rgba(255,255,255,0.15)` 
-                                    : 'inset 0 1px 2px rgba(0,0,0,0.2)',
-                                  transform: i <= pwStrength.level ? 'scaleY(1.2)' : 'scaleY(1)',
-                                }}
-                              />
-                            ))}
-                          </div>
-                          <span className="text-[9px] font-bold uppercase tracking-[0.14em] flex items-center gap-2 transition-all duration-500"
-                            style={{ 
-                              color: pwStrength.color,
-                              filter: `drop-shadow(0 0 8px ${pwStrength.color}40)`
-                            }}
-                          >
-                            {pwStrength.label && (
-                              <>
-                                <div className="w-2 h-2 rounded-full transition-all duration-500"
-                                  style={{ 
-                                    background: pwStrength.color, 
-                                    boxShadow: `0 0 10px ${pwStrength.color}80, 0 0 20px ${pwStrength.color}40`,
-                                    animation: 'glow-pulse 2s ease-in-out infinite'
-                                  }}
-                                />
-                                {pwStrength.label}
-                              </>
-                            )}
-                          </span>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Remember + Forgot */}
-                    <div className="flex items-center justify-between py-1.5">
-                      <label className="flex items-center cursor-pointer group select-none gap-3"
-                        onClick={() => setRememberMe(!rememberMe)}
-                      >
-                        <div className="relative w-10 flex-shrink-0 rounded-full transition-all duration-500"
-                          style={{
-                            height: '22px',
-                            background: rememberMe 
-                              ? 'linear-gradient(135deg, #6366f1, #8b5cf6, #a855f7)' 
-                              : 'rgba(255,255,255,0.07)',
-                            boxShadow: rememberMe 
-                              ? '0 0 16px rgba(99,102,241,0.4), inset 0 1px 0 rgba(255,255,255,0.15)' 
-                              : 'inset 0 2px 4px rgba(0,0,0,0.25)',
-                            border: `1.5px solid ${rememberMe ? 'rgba(139,92,246,0.50)' : 'rgba(255,255,255,0.10)'}`,
-                          }}
-                        >
-                          <div className="absolute top-[3px] w-4 h-4 rounded-full transition-all duration-500"
-                            style={{
-                              left: rememberMe ? 'calc(100% - 19px)' : '3px',
-                              background: rememberMe 
-                                ? 'linear-gradient(135deg, #ffffff, #f0f9ff)' 
-                                : 'rgba(255,255,255,0.40)',
-                              boxShadow: rememberMe 
-                                ? '0 2px 6px rgba(0,0,0,0.25), 0 0 12px rgba(139,92,246,0.3)' 
-                                : '0 1px 3px rgba(0,0,0,0.2)',
-                              transform: rememberMe ? 'scale(1.1)' : 'scale(1)',
-                            }}
-                          />
-                        </div>
-                        <span className="text-[13px] font-medium transition-all duration-500 group-hover:text-indigo-300/70"
-                          style={{ 
-                            color: rememberMe ? 'rgba(199,210,254,0.70)' : 'rgba(255,255,255,0.35)',
-                            filter: rememberMe ? 'drop-shadow(0 0 8px rgba(199,210,254,0.2))' : 'none'
-                          }}
-                        >
-                          Remember me
-                        </span>
-                      </label>
-                      <button type="button"
-                        className="text-[13px] font-semibold transition-all duration-500 relative group/forgot px-3 py-1.5 rounded-lg hover:bg-white/[0.06] outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/50 hover:scale-105"
-                        style={{ color: 'rgba(129,140,248,0.70)' }}
-                        onMouseEnter={(e) => { 
-                          e.target.style.color = '#e0e7ff'; 
-                          e.target.style.filter = 'drop-shadow(0 0 8px rgba(129,140,248,0.3))';
- }}
-                        onMouseLeave={(e) => { 
-                          e.target.style.color = 'rgba(129,140,248,0.70)';
-                          e.target.style.filter = 'none';
-                        }}
-                      >
-                        Forgot password?
-                        <span className="absolute left-3 right-3 bottom-0.5 h-[2px] rounded-full bg-gradient-to-r from-indigo-400/60 via-violet-400/70 to-indigo-400/60 origin-left scale-x-0 group-hover/forgot:scale-x-100 transition-transform duration-500"
-                          style={{ boxShadow: '0 0 8px rgba(129,140,248,0.4)' }}
-                        />
-                      </button>
-                    </div>
-
-                    {/* ── Submit Button — warm-to-cool gradient for energy ── */}
-                    <button
-                      type="submit"
-                      disabled={isLoading}
-                      className={`w-full mt-2 relative overflow-hidden group rounded-xl transition-all duration-700 outline-none focus-visible:ring-2 focus-visible:ring-indigo-300/60 focus-visible:ring-offset-4 focus-visible:ring-offset-transparent ${isLoading
-                          ? 'cursor-not-allowed opacity-75'
-                          : 'hover:scale-[1.02] active:scale-[0.98] hover:shadow-2xl'
-                        }`}
-                      style={{
-                        background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #9333ea 100%)',
-                        boxShadow: isLoading
-                          ? '0 4px 14px rgba(99,102,241,0.15)'
-                          : '0 10px 36px rgba(99,102,241,0.45), inset 0 2px 0 rgba(255,255,255,0.15), 0 0 80px rgba(139,92,246,0.15)',
-                      }}
-                      onMouseEnter={e => { 
-                        if (!isLoading) {
-                          e.currentTarget.style.boxShadow = '0 16px 48px rgba(99,102,241,0.65), 0 0 64px rgba(139,92,246,0.25), 0 0 100px rgba(168,85,247,0.15), inset 0 2px 0 rgba(255,255,255,0.20)';
-                          e.currentTarget.style.transform = 'translateY(-3px) scale(1.02)';
-                        }
-                      }}
-                      onMouseLeave={e => { 
-                        e.currentTarget.style.boxShadow = isLoading ? '0 4px 14px rgba(99,102,241,0.15)' : '0 10px 36px rgba(99,102,241,0.45), inset 0 2px 0 rgba(255,255,255,0.15), 0 0 80px rgba(139,92,246,0.15)'; 
-                        if (!isLoading) e.currentTarget.style.transform = 'translateY(0) scale(1)';
-                      }}
-                    >
-                      {/* Shimmer */}
-                      {!isLoading && (
-                        <>
-                          <div className="absolute inset-0"
-                            style={{ 
-                              background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.20) 40%, rgba(255,255,255,0.35) 50%, rgba(255,255,255,0.20) 60%, transparent 100%)', 
-                              backgroundSize: '200% 100%',
-                              animation: 'shimmer 3.5s linear infinite',
-                              filter: 'blur(8px)'
-                            }}
-                          />
-                          {/* Animated border glow */}
-                          <div className="absolute -inset-[1px] rounded-xl pointer-events-none opacity-75"
-                            style={{ 
-                              background: 'linear-gradient(90deg, rgba(168,85,247,0.6), rgba(139,92,246,0.7), rgba(99,102,241,0.6), rgba(139,92,246,0.7), rgba(168,85,247,0.6))',
-                              backgroundSize: '200% 100%',
-                              WebkitMaskImage: 'linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)',
-                              WebkitMaskComposite: 'xor',
-                              maskComposite: 'exclude',
-                              padding: '1.5px',
-                              animation: 'shimmer 3s linear infinite reverse',
-                              filter: 'blur(1px)'
-                            }}
-                          />
-                        </>
-                      )}
-                      {/* Top highlight */}
-                      <div className="absolute top-0 left-0 right-0 h-[4px] rounded-t-xl"
-                        style={{ 
-                          background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.45) 25%, rgba(255,255,255,0.60) 50%, rgba(255,255,255,0.45) 75%, transparent)',
-                          boxShadow: '0 0 24px rgba(255,255,255,0.35), 0 2px 0 rgba(255,255,255,0.10)'
-                        }}
-                      />
-                      <div className="relative flex items-center justify-center gap-3 py-[14px] px-6">
-                        {isLoading ? (
-                          <>
-                            <div className="w-[18px] h-[18px] border-2 border-white/70 border-t-transparent rounded-full animate-spin" 
-                              style={{ filter: 'drop-shadow(0 0 6px rgba(255,255,255,0.5))' }}
-                            />
-                            <span className="text-white font-bold text-[14px] tracking-wide" 
-                              style={{ filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.3))' }}
-                            >
-                              Signing In...
-                            </span>
-                          </>
-                        ) : (
-                          <>
-                            <LogIn className="w-[17px] h-[17px] text-white transition-all duration-500 group-hover:rotate-[-8deg] group-hover:scale-110" 
-                              style={{ filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.3))' }}
-                            />
-                            <span className="text-white font-bold text-[14px] tracking-wide" 
-                              style={{ filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.3))' }}
-                            >
-                              Sign In to Dashboard
-                            </span>
-                            <ArrowRight className="w-[17px] h-[17px] text-white transition-all duration-500 group-hover:translate-x-2 group-hover:scale-110" 
-                              style={{ filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.3))' }}
-                            />
-                          </>
-                        )}
-                      </div>
-                    </button>
-                  </form>
-
-                  {/* Footer */}
-                  <div className="pt-6" style={{ borderTop: '1px solid rgba(139,92,246,0.10)' }}>
-                    <div className="flex items-center justify-center gap-3 text-[12px] cursor-default transition-all duration-500 group/footer"
-                      style={{ color: 'rgba(199,210,254,0.35)' }}
-                    >
-                      <div className="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-500 group-hover/footer:scale-110 group-hover/footer:rotate-6"
-                        style={{ 
-                          background: 'linear-gradient(135deg, rgba(16,185,129,0.12), rgba(5,150,105,0.10))', 
-                          border: '1px solid rgba(16,185,129,0.20)',
-                          boxShadow: '0 4px 12px rgba(16,185,129,0.10), inset 0 1px 0 rgba(255,255,255,0.10)',
-                          animation: 'breathing 4s ease-in-out infinite'
-                        }}
-                      >
-                        <Shield className="w-4 h-4 transition-all duration-500" 
-                          style={{ 
-                            color: '#10b981',
-                            filter: 'drop-shadow(0 0 8px rgba(16,185,129,0.4))'
-                          }} 
-                        />
-                      </div>
-                      <span className="tracking-wide transition-colors duration-500 group-hover/footer:text-indigo-300/50">
-                        Secured with 256-bit SSL Encryption
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Copyright */}
-              <p className="text-center text-[10px] mt-7 tracking-wider cursor-default flex items-center justify-center gap-3 transition-all duration-500 hover:tracking-widest"
-                style={{ color: 'rgba(199,210,254,0.20)' }}
-              >
-                <span className="transition-colors duration-500 hover:text-indigo-300/30">© 2026 SmartMine ERP</span>
-                <span className="w-1.5 h-1.5 rounded-full transition-all duration-500 hover:scale-150" 
-                  style={{ 
-                    background: 'linear-gradient(135deg, rgba(139,92,246,0.25), rgba(99,102,241,0.20))',
-                    boxShadow: '0 0 10px rgba(139,92,246,0.15)'
-                  }} 
-                />
-                <span className="transition-colors duration-500 hover:text-indigo-300/30">All Rights Reserved</span>
-              </p>
-            </div>
+          <div>
+            <h2 style={{
+              fontSize: '22px', fontWeight: 800, color: '#fff',
+              letterSpacing: '-0.02em', lineHeight: 1.2,
+            }}>
+              SmartMine<span style={{ color: '#818cf8' }}> ERP</span>
+            </h2>
+            <p style={{ fontSize: '12px', color: '#64748b', fontWeight: 500, marginTop: '2px' }}>
+              AI-Powered Mining Management
+            </p>
           </div>
+        </div>
 
+        {/* Hero Text */}
+        <h1 style={{
+          fontSize: 'clamp(2.5rem, 4vw, 3.5rem)',
+          fontWeight: 900,
+          lineHeight: 1.1,
+          letterSpacing: '-0.03em',
+          color: '#fff',
+          marginBottom: '24px',
+        }}>
+          Manage your<br />
+          mining operations<br />
+          <span style={{
+            background: 'linear-gradient(135deg, #818cf8, #c084fc)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+          }}>intelligently.</span>
+        </h1>
+
+        <p style={{
+          fontSize: '16px', lineHeight: 1.7, color: '#64748b',
+          maxWidth: '440px', marginBottom: '48px',
+        }}>
+          Real-time analytics, AI-powered detection, and seamless automation
+          for modern mining enterprises.
+        </p>
+
+        {/* Stats Row */}
+        <div style={{ display: 'flex', gap: '48px' }}>
+          {[
+            { value: '99.9%', label: 'Uptime SLA' },
+            { value: '500+', label: 'Active Mines' },
+            { value: '50K+', label: 'Vehicles Tracked' },
+          ].map((stat, i) => (
+            <div key={i}>
+              <p style={{
+                fontSize: '28px', fontWeight: 800, color: '#fff',
+                letterSpacing: '-0.02em', lineHeight: 1,
+              }}>{stat.value}</p>
+              <p style={{
+                fontSize: '12px', color: '#475569', fontWeight: 600,
+                marginTop: '6px', textTransform: 'uppercase', letterSpacing: '0.08em',
+              }}>{stat.label}</p>
+            </div>
+          ))}
         </div>
       </div>
+
+      {/* ═══ Right Panel — Login Form ═══ */}
+      <div
+        className="login-right"
+        style={{
+          flex: '1 1 45%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '2rem',
+          position: 'relative',
+        }}
+      >
+        {/* Subtle separator line */}
+        <div style={{
+          position: 'absolute', left: 0, top: '10%', bottom: '10%',
+          width: '1px',
+          background: 'linear-gradient(to bottom, transparent, rgba(99,102,241,0.15), transparent)',
+        }} />
+
+        <div
+          style={{
+            width: '100%',
+            maxWidth: '420px',
+            opacity: mounted ? 1 : 0,
+            transform: mounted ? 'translateY(0)' : 'translateY(30px)',
+            transition: 'all 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.2s',
+          }}
+        >
+          {/* Card */}
+          <div style={{
+            background: 'rgba(15, 23, 42, 0.6)',
+            backdropFilter: 'blur(24px)',
+            border: '1px solid rgba(99, 102, 241, 0.12)',
+            borderRadius: '24px',
+            padding: '40px',
+            boxShadow: '0 24px 64px rgba(0, 0, 0, 0.5)',
+          }}>
+            {/* Header */}
+            <div style={{ marginBottom: '32px' }}>
+              <h2 style={{
+                fontSize: '24px', fontWeight: 800, color: '#fff',
+                letterSpacing: '-0.02em', marginBottom: '8px',
+              }}>
+                Welcome back
+              </h2>
+              <p style={{ fontSize: '14px', color: '#64748b' }}>
+                Sign in to access your dashboard
+              </p>
+            </div>
+
+            {/* Role Selection */}
+            <div style={{ marginBottom: '28px' }}>
+              <label style={{
+                display: 'block', fontSize: '11px', fontWeight: 700,
+                color: '#475569', textTransform: 'uppercase', letterSpacing: '0.1em',
+                marginBottom: '12px',
+              }}>Select Role</label>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
+                {roles.map((role) => {
+                  const RoleIcon = role.icon;
+                  const isSelected = selectedRole === role.id;
+                  return (
+                    <button
+                      key={role.id}
+                      type="button"
+                      onClick={() => setSelectedRole(role.id)}
+                      style={{
+                        display: 'flex', flexDirection: 'column', alignItems: 'center',
+                        gap: '8px', padding: '16px 8px', borderRadius: '14px',
+                        border: `1.5px solid ${isSelected ? role.color : 'rgba(255,255,255,0.06)'}`,
+                        background: isSelected ? `${role.color}12` : 'rgba(255,255,255,0.02)',
+                        cursor: 'pointer',
+                        transition: 'all 0.25s ease',
+                        transform: isSelected ? 'translateY(-2px)' : 'none',
+                        boxShadow: isSelected ? `0 8px 24px ${role.color}20` : 'none',
+                      }}
+                    >
+                      <div style={{
+                        width: '40px', height: '40px', borderRadius: '12px',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        background: isSelected ? role.bg : 'rgba(255,255,255,0.04)',
+                        transition: 'all 0.25s ease',
+                      }}>
+                        <RoleIcon style={{
+                          width: '18px', height: '18px',
+                          color: isSelected ? role.color : '#475569',
+                          transition: 'color 0.25s ease',
+                        }} />
+                      </div>
+                      <span style={{
+                        fontSize: '11px', fontWeight: 700,
+                        color: isSelected ? '#e2e8f0' : '#475569',
+                        letterSpacing: '0.02em',
+                        transition: 'color 0.25s ease',
+                      }}>{role.name}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Form */}
+            <form onSubmit={handleLogin}>
+              {/* Username */}
+              <div style={{ marginBottom: '18px' }}>
+                <label htmlFor="login-username" style={{
+                  display: 'block', fontSize: '11px', fontWeight: 700,
+                  color: '#475569', textTransform: 'uppercase', letterSpacing: '0.1em',
+                  marginBottom: '8px',
+                }}>Username</label>
+                <div style={{ position: 'relative' }}>
+                  <User style={{
+                    position: 'absolute', left: '14px', top: '50%',
+                    transform: 'translateY(-50%)', width: '16px', height: '16px',
+                    color: '#475569', pointerEvents: 'none',
+                  }} />
+                  <input
+                    id="login-username"
+                    type="text"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    placeholder="Enter username"
+                    required
+                    autoComplete="username"
+                    style={{
+                      width: '100%', padding: '12px 14px 12px 42px',
+                      borderRadius: '12px', fontSize: '14px', fontWeight: 500,
+                      color: '#e2e8f0', background: 'rgba(255,255,255,0.04)',
+                      border: '1.5px solid rgba(255,255,255,0.08)',
+                      outline: 'none', transition: 'all 0.2s ease',
+                      boxSizing: 'border-box',
+                    }}
+                    onFocus={e => {
+                      e.target.style.borderColor = '#6366f1';
+                      e.target.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.15)';
+                      e.target.style.background = 'rgba(99,102,241,0.06)';
+                    }}
+                    onBlur={e => {
+                      e.target.style.borderColor = 'rgba(255,255,255,0.08)';
+                      e.target.style.boxShadow = 'none';
+                      e.target.style.background = 'rgba(255,255,255,0.04)';
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* Password */}
+              <div style={{ marginBottom: '8px' }}>
+                <label htmlFor="login-password" style={{
+                  display: 'block', fontSize: '11px', fontWeight: 700,
+                  color: '#475569', textTransform: 'uppercase', letterSpacing: '0.1em',
+                  marginBottom: '8px',
+                }}>Password</label>
+                <div style={{ position: 'relative' }}>
+                  <Lock style={{
+                    position: 'absolute', left: '14px', top: '50%',
+                    transform: 'translateY(-50%)', width: '16px', height: '16px',
+                    color: '#475569', pointerEvents: 'none',
+                  }} />
+                  <input
+                    id="login-password"
+                    type={showPassword ? 'text' : 'password'}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Enter password"
+                    required
+                    autoComplete="current-password"
+                    style={{
+                      width: '100%', padding: '12px 48px 12px 42px',
+                      borderRadius: '12px', fontSize: '14px', fontWeight: 500,
+                      color: '#e2e8f0', background: 'rgba(255,255,255,0.04)',
+                      border: '1.5px solid rgba(255,255,255,0.08)',
+                      outline: 'none', transition: 'all 0.2s ease',
+                      boxSizing: 'border-box',
+                    }}
+                    onFocus={e => {
+                      e.target.style.borderColor = '#6366f1';
+                      e.target.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.15)';
+                      e.target.style.background = 'rgba(99,102,241,0.06)';
+                    }}
+                    onBlur={e => {
+                      e.target.style.borderColor = 'rgba(255,255,255,0.08)';
+                      e.target.style.boxShadow = 'none';
+                      e.target.style.background = 'rgba(255,255,255,0.04)';
+                    }}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    aria-label={showPassword ? 'Hide password' : 'Show password'}
+                    style={{
+                      position: 'absolute', right: '4px', top: '50%',
+                      transform: 'translateY(-50%)', width: '36px', height: '36px',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      borderRadius: '10px', border: 'none', cursor: 'pointer',
+                      background: 'transparent', color: '#64748b',
+                      transition: 'all 0.2s ease',
+                    }}
+                    onMouseEnter={e => { e.currentTarget.style.color = '#a5b4fc'; e.currentTarget.style.background = 'rgba(99,102,241,0.1)'; }}
+                    onMouseLeave={e => { e.currentTarget.style.color = '#64748b'; e.currentTarget.style.background = 'transparent'; }}
+                  >
+                    {showPassword ? <EyeOff style={{ width: '16px', height: '16px' }} /> : <Eye style={{ width: '16px', height: '16px' }} />}
+                  </button>
+                </div>
+              </div>
+
+              {/* Password Strength */}
+              {password && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '18px', marginTop: '10px' }}>
+                  <div style={{ display: 'flex', gap: '4px', flex: 1 }}>
+                    {[1, 2, 3].map(i => (
+                      <div key={i} style={{
+                        height: '3px', flex: 1, borderRadius: '4px',
+                        background: i <= pwStrength.level ? pwStrength.color : 'rgba(255,255,255,0.06)',
+                        transition: 'all 0.3s ease',
+                      }} />
+                    ))}
+                  </div>
+                  <span style={{
+                    fontSize: '10px', fontWeight: 700, color: pwStrength.color,
+                    textTransform: 'uppercase', letterSpacing: '0.08em',
+                  }}>{pwStrength.label}</span>
+                </div>
+              )}
+
+              {/* Remember + Forgot */}
+              <div style={{
+                display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                marginBottom: '24px', marginTop: password ? '0' : '18px',
+              }}>
+                <label
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: '10px',
+                    cursor: 'pointer', userSelect: 'none',
+                  }}
+                  onClick={() => setRememberMe(!rememberMe)}
+                >
+                  <div style={{
+                    width: '18px', height: '18px', borderRadius: '5px',
+                    border: `1.5px solid ${rememberMe ? '#6366f1' : 'rgba(255,255,255,0.12)'}`,
+                    background: rememberMe ? '#6366f1' : 'transparent',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    transition: 'all 0.2s ease',
+                  }}>
+                    {rememberMe && (
+                      <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
+                        <path d="M1 4L3.5 6.5L9 1" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    )}
+                  </div>
+                  <span style={{ fontSize: '13px', color: '#64748b', fontWeight: 500 }}>Remember me</span>
+                </label>
+                <button
+                  type="button"
+                  style={{
+                    background: 'none', border: 'none', cursor: 'pointer',
+                    fontSize: '13px', fontWeight: 600, color: '#818cf8',
+                    transition: 'color 0.2s ease',
+                  }}
+                  onMouseEnter={e => e.target.style.color = '#a5b4fc'}
+                  onMouseLeave={e => e.target.style.color = '#818cf8'}
+                >
+                  Forgot password?
+                </button>
+              </div>
+
+              {/* Submit Button */}
+              <button
+                type="submit"
+                disabled={isLoading}
+                style={{
+                  width: '100%', padding: '14px', borderRadius: '14px',
+                  border: 'none', cursor: isLoading ? 'not-allowed' : 'pointer',
+                  background: isLoading
+                    ? 'rgba(99,102,241,0.4)'
+                    : 'linear-gradient(135deg, #4f46e5, #7c3aed)',
+                  color: '#fff', fontSize: '14px', fontWeight: 700,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px',
+                  transition: 'all 0.3s ease',
+                  boxShadow: isLoading ? 'none' : '0 8px 32px rgba(99,102,241,0.35)',
+                  opacity: isLoading ? 0.7 : 1,
+                  transform: 'translateY(0)',
+                  letterSpacing: '0.01em',
+                }}
+                onMouseEnter={e => {
+                  if (!isLoading) {
+                    e.currentTarget.style.transform = 'translateY(-2px)';
+                    e.currentTarget.style.boxShadow = '0 12px 40px rgba(99,102,241,0.5)';
+                  }
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = isLoading ? 'none' : '0 8px 32px rgba(99,102,241,0.35)';
+                }}
+              >
+                {isLoading ? (
+                  <>
+                    <div style={{
+                      width: '16px', height: '16px', border: '2px solid rgba(255,255,255,0.3)',
+                      borderTopColor: '#fff', borderRadius: '50%',
+                      animation: 'spin 0.6s linear infinite',
+                    }} />
+                    <span>Signing in...</span>
+                  </>
+                ) : (
+                  <>
+                    <LogIn style={{ width: '16px', height: '16px' }} />
+                    <span>Sign In</span>
+                    <ArrowRight style={{ width: '16px', height: '16px' }} />
+                  </>
+                )}
+              </button>
+            </form>
+
+            {/* Footer */}
+            <div style={{
+              marginTop: '28px', paddingTop: '20px',
+              borderTop: '1px solid rgba(255,255,255,0.05)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+            }}>
+              <Shield style={{ width: '12px', height: '12px', color: '#10b981' }} />
+              <span style={{ fontSize: '11px', color: '#334155', fontWeight: 500 }}>
+                Secured with 256-bit SSL Encryption
+              </span>
+            </div>
+          </div>
+
+          {/* Copyright */}
+          <p style={{
+            textAlign: 'center', fontSize: '11px', color: '#1e293b',
+            marginTop: '24px', fontWeight: 500,
+          }}>
+            © 2026 SmartMine ERP · All Rights Reserved
+          </p>
+        </div>
+      </div>
+
+      {/* Mobile responsive */}
+      <style>{`
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .login-page input::placeholder { color: #334155; }
+        @media (max-width: 1024px) {
+          .login-page { flex-direction: column !important; }
+          .login-left { display: none !important; }
+          .login-right { flex: 1 !important; padding: 2rem !important; }
+        }
+      `}</style>
     </div>
   );
 }
